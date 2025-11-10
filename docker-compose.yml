@@ -1,0 +1,58 @@
+services:
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "3000:3000"
+    depends_on:
+      - rabbitmq
+
+  user-service:
+    build: ./user-service
+    ports:
+      - "3001:3001"
+    depends_on:
+      - postgres
+
+  template-service:
+    build: ./template-service
+    ports:
+      - "3002:3002"
+    depends_on:
+      - postgres
+
+  email-service:
+    build: ./email-service
+    ports:
+      - "3003:3003"
+    depends_on:
+      - rabbitmq
+
+  push-service:
+    build: ./push-service
+    ports:
+      - "3004:3004"
+    depends_on:
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: notifications
+    ports:
+      - "5432:5432"
