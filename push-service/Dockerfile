@@ -12,6 +12,8 @@ RUN npm install
 # Copy the rest of your source code
 COPY . .
 
+RUN npm install -g typescript
+
 # Build TypeScript -> dist
 RUN npx tsc
 
